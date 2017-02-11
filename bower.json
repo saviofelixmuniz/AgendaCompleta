@@ -1,0 +1,17 @@
+{
+  "name": "AgendaCompleta",
+  "authors": [
+    "Sávio Muniz <savio.muniz@ccc.ufcg.edu.br>"
+  ],
+  "description": "SI Lab 4",
+  "main": "index.html",
+  "license": "Sávio",
+  "homepage": "index.html",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

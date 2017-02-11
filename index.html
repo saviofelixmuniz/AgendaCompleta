@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Agenda de Tarefas</title>
+	<!-- IMPORT -->
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/superhero-theme/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+
+	<script src="bower_components/angular-material/angular-material.js"></script>
+	<script src="bower_components/angular/angular.js"></script>
+	<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+	<script src="bower_components/angular-route/angular-route.min.js"></script>
+		
+	<!-- SCRIPTS -->
+	<script src="src/app.js"></script>
+	<script src="src/router.js"></script>
+	<script src="src/home-controller.js"></script>
+</head>
+
+<body ng-app="agendaApp" ng-controller="homeController">
+	<div>
+		<div class="row" style="padding-bottom: 10px; padding-left: 20px">
+			<div class="col-xs-12">	
+				<h1> Agenda de Tarefas</h1>	
+			</div>
+		</div>
+		<div class="row" style="padding-bottom: 10px; padding-left: 20px">
+			<ul class="nav nav-pills">
+			  <li role="presentation" ng-class="isActive('/home')"><a href="#">Tarefas</a></li>
+			  <li role="presentation" ng-class="isActive('/add')"><a href="/#!/add">Adicionar...</a></li>
+			  <li role="presentation" ng-class="isActive('/contact')"><a href="/#!/contact">Contato</a></li>
+			</ul>
+		</div>
+		<div class="col-xs-9">	
+				<div ng-view></div>
+		</div>
+	</div>
+</body>
+</html>
