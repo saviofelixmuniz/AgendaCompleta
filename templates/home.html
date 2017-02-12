@@ -2,16 +2,17 @@
 	<div class="panel panel-default col-xs-3" style="margin: 20px" ng-repeat = "list in pages[currentPage]">
 		<div class="panel panel-default">
 			<div class="panel-heading">
+				<h6 style = "float: right">({{list.tasks.length}})</h6>
 				<div class="panel-title">
-					{{list.name}}
+					<h4>{{list.name}}</h4>
 				</div>
 			</div>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-hover" ng-init = "tasks = list.tasks">
 				<tr ng-repeat="task in tasks">
-					<td ng-click="coisinha(tasks)">		
-						 {{task.name}}
+					<td ng-click="setTask(task); openModal(task)">		
+						 <h5>{{task.name}}</h5>
 					</td>
 				</tr>
 			</table>
@@ -34,3 +35,22 @@
     </li>
   </ul>
 </nav>	
+
+<script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header" ng-init = "coisinha(currentTask)">
+            <h3 class="modal-title" id="modal-title">{{name}}</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+            <ul>
+                <li ng-repeat="item in items">
+                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
+                </li>
+            </ul>
+            Selected: <b>{{ selected.item }}</b>
+        </div>
+        <div class="modal-footer" ng-init="editEnabled = true">
+        	<button style = "float: left" class="btn btn-primary" type="button" ng-show = "editEnabled" ng-click="editEnabled = false">Editar</button>
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+</script>
