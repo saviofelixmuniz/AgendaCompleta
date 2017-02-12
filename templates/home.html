@@ -1,3 +1,5 @@
+<!-- PAINEL COM LISTAS -->
+
 <div class="row" ng-init="processPages()">
 	<div class="panel panel-default col-xs-3" style="margin: 20px" ng-repeat = "list in pages[currentPage]">
 		<div class="panel panel-default">
@@ -20,6 +22,8 @@
 	</div>	
 </div>
 
+<!-- NAVEGADOR DE PÁGINAS -->
+
 <nav aria-label="Page navigation">
   <ul class="pagination" ng-init = "indexes = getIndex()">
     <li>
@@ -36,21 +40,26 @@
   </ul>
 </nav>	
 
+<!-- MODAL -->
+
 <script type="text/ng-template" id="myModalContent.html">
+	<div ng-init="editEnabled = false">
         <div class="modal-header" ng-init = "coisinha(currentTask)">
-            <h3 class="modal-title" id="modal-title">{{name}}</h3>
+            <h3 class="modal-title" id="modal-title" ng-show = "!editEnabled">Ok</h3>
+            <h3 class="modal-title" id="modal-title" ng-show = "editEnabled">not ok</h3>
         </div>
         <div class="modal-body" id="modal-body">
-            <ul>
-                <li ng-repeat="item in items">
-                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-                </li>
-            </ul>
-            Selected: <b>{{ selected.item }}</b>
+        	<div ng-show="!editEnabled">
+
+        	</div>
+        	<div ng-show="editEnabled">
+				
+        	</div>
         </div>
-        <div class="modal-footer" ng-init="editEnabled = true">
-        	<button style = "float: left" class="btn btn-primary" type="button" ng-show = "editEnabled" ng-click="editEnabled = false">Editar</button>
+        <div class="modal-footer">
+        	<button style = "float: left" class="btn btn-primary" type="button" ng-show = "!editEnabled" ng-click="editEnabled = true">Editar</button>
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
+	</div>
 </script>
