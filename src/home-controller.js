@@ -1,5 +1,5 @@
 angular.module('agendaApp')
-.controller("homeController", function($scope,$location) {
+.controller("homeController", function($scope,$rootScope,$location, $uibModal, $log, $document) {
 	$scope.priorities = [
 		"Alta",
 		"Média",
@@ -16,6 +16,8 @@ angular.module('agendaApp')
         "Faculdade",
         "Escola"
     ]
+    $scope.items = ['item1', 'item2', 'item3'];
+
 
 	$scope.isActive = function (page) {
 		if ($location.url() == page) return 'active';
@@ -25,7 +27,14 @@ angular.module('agendaApp')
 	$scope.newTask = "";
 
     $scope.subtasks = [];
-    $scope.lists = [];
+    $scope.lists = [ 
+        {name : "savio",
+         tasks : [
+            {name : "savio1"}
+         ]
+         }         
+    ];
+
     $scope.indexes = [];
     $scope.currentPage = 0;
 
@@ -33,6 +42,12 @@ angular.module('agendaApp')
     $scope.itemToAdd = "Tarefa";
     $scope.selectedCategory = "Categoria";
     $scope.selectedList = {name : "Lista"};
+    $scope.currentTask = undefined;
+
+
+    $scope.coisinha = function(name) {
+        console.log(name);
+    }
 
     $scope.selectPriority = function(priority) {
     	$scope.priority = priority;
@@ -81,10 +96,10 @@ angular.module('agendaApp')
                         category : $scope.selectedCategory,
     		            description : $scope.description };
 
-        $scope.lists.every (function (list) {
+        $scope.lists.some (function (list) {
             if (list.name == newTask.list.name) {
                 list.tasks.push(newTask);
-                return;
+                return true;
             }
         });
 
@@ -119,8 +134,45 @@ angular.module('agendaApp')
     	isopen: false
  	 };
 
-     $scope.coisinha = function (tasks) {
-        console.log(tasks);
-     }
+    $scope.openModal = function (task, size, parentSelector) {  
+
+        var parentElem = parentSelector ? 
+            angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+        
+        var modalInstance = $uibModal.open({
+            animation: true,
+            ariaLabelledBy: 'modal-title',
+            ariaDescribedBy: 'modal-body',
+            templateUrl: 'myModalContent.html',
+            controller: 'homeController',
+            controllerAs: '$ctrl',
+            size: size,
+            appendTo: parentElem,
+            resolve: {
+                items: function () {
+                  return $scope.items;
+                }
+            }
+        });
+
+        $rootScope.currentModal = modalInstance;
+
+        $rootScope.currentModal.result.then(function () {
+        }, function () {
+            $log.info('Modal dismissed at: ' + new Date());
+        });
+    }
+
+    $scope.ok = function () {
+        $rootScope.currentModal.close();
+    };
+
+    $scope.setTask = function(task) {
+        $scope.currentTask = task;
+    }
+
+    $scope.cancel = function () {
+        $rootScope.currentModal.dismiss({$value: 'cancel'});
+    };
 
 })
