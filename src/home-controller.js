@@ -7,7 +7,8 @@ angular.module('agendaApp')
 	]
     $scope.itemsToAdd = [
         "Tarefa",
-        "Lista"
+        "Lista",
+        "Categoria"
     ]
     $scope.categories = [
         "Trabalho",
@@ -33,15 +34,12 @@ angular.module('agendaApp')
     $scope.lists = [ 
         {name : "savio",
          tasks : [
-            {name : "savio1",
+            {name : "Go out",
             category: "Casa",
             priority: "Alta",
-            subtasks: { undone: ["Fazer cocô", "Fazer xixi", "Dar descarga"],
+            subtasks: { undone: ["Have fun", "Drink beer", "Go home"],
                         done: []},
-            list : {
-                name : "savio",
-                tasks : []
-            }
+            list : $scope.lists[0]
             }
          ]
          }         
@@ -135,6 +133,7 @@ angular.module('agendaApp')
     }
 
     $scope.setPage = function (index) {
+        if (index > $scope.pages.length || index <= 0) return;
         $scope.currentPage = index - 1;
     }
 
@@ -169,17 +168,15 @@ angular.module('agendaApp')
         });
     }
 
-    $scope.ok = function () {
-        $rootScope.currentModal.close();
-    };
+    $scope.saveCategory = function(categoryName) {
+        $scope.categories.push(categoryName);
+        $scope.categoryName = "";
+        console.log($scope.categories);
+    }
 
     $scope.setTask = function(task) {
         sharedModalProperties.setCurrentTask(task);
     }
 
-
-    $scope.cancel = function () {
-        $rootScope.currentModal.dismiss({$value: 'cancel'});
-    };
 
 })

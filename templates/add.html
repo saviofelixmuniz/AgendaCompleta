@@ -164,5 +164,23 @@
 			</button>	
 		</div>	
 	</div>
-		
+</div>
+
+<div style = "padding-left: 20px" ng-show="$parent.itemToAdd == 'Categoria'">
+	<div class="row">
+		<div class="col-xs-4">
+			<div class="input-group">
+			  <span class="input-group-addon" id="sizing-addon2">
+			  	<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+		  	  </span>
+			  <input type="text" class="form-control" placeholder="Nome da categoria" aria-describedby="sizing-addon2" ng-model = "$parent.categoryName">
+			</div>
+		</div>
+		<div class="col-xs-3">
+			<button type="button" class="btn btn-primary" ng-click="saveCategory(categoryName)">
+			  <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+			  <span>Salvar</span>
+			</button>	
+		</div>	
+	</div>
 </div>
