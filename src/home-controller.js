@@ -143,15 +143,18 @@ angular.module('agendaApp')
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
             templateUrl: 'myModalContent.html',
-            controller: 'homeController',
-            controllerAs: '$ctrl',
             size: size,
             appendTo: parentElem,
             resolve: {
-                items: function () {
+                modalItems: function () {
+                  console.log("items to send to modal", $scope.items);
                   return $scope.items;
                 }
-            }
+            },
+            controller: ['$scope', 'modalItems', function($scope, modalItems){
+                console.log("items sent to modal", modalItems);
+                $scope.modalItems = modalItems;
+            }]
         });
 
         $rootScope.currentModal = modalInstance;
@@ -167,6 +170,7 @@ angular.module('agendaApp')
     };
 
     $scope.setTask = function(task) {
+        console.log("current task", task);
         $scope.currentTask = task;
     }
 
