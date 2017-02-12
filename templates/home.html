@@ -4,16 +4,16 @@
 	<div class="panel panel-default col-xs-3" style="margin: 20px" ng-repeat = "list in pages[currentPage]">
 		<div class="panel panel-default">
 			<div class="panel-heading">
-				<h6 style = "float: right">({{list.tasks.length}})</h6>
+				<span class="badge" style="float: right;">{{list.tasks.length}}</span>
 				<div class="panel-title">
-					<h4>{{list.name}}</h4>
+					<h4><b>{{list.name}}</b></h4>
 				</div>
 			</div>
 		</div>
 		<div class="panel-body">
 			<table class="table table-striped table-hover" ng-init = "tasks = list.tasks">
 				<tr ng-repeat="task in tasks">
-					<td ng-click="setTask(task); openModal(task)">		
+					<td ng-click="setTask(task); openModal()">		
 						 <h5>{{task.name}}</h5>
 					</td>
 				</tr>
@@ -43,17 +43,182 @@
 <!-- MODAL -->
 
 <script type="text/ng-template" id="myModalContent.html">
-	<div ng-init="editEnabled = false">
-        <div class="modal-header" ng-init = "coisinha(currentTask)">
-            <h3 class="modal-title" id="modal-title" ng-show = "!editEnabled">Ok</h3>
-            <h3 class="modal-title" id="modal-title" ng-show = "editEnabled">not ok</h3>
+	<div ng-init="editEnabled = false" ng-controller = "modalController">
+        <div class="modal-header" ng-init = "print()">
+            <h3 class="modal-title" id="modal-title" ng-show = "!editEnabled">{{currentTask.name}}</h3>
+            <div class="modal-title" ng-show = "editEnabled">
+				<div class="col-xs-6" style = "float: left">
+					<div class="input-group">
+					  <input type="text" class="form-control" placeholder="Nome" aria-describedby="sizing-addon2" ng-model = "currentTask.name">
+					</div>
+				</div> 
+            </div>
         </div>
         <div class="modal-body" id="modal-body">
         	<div ng-show="!editEnabled">
-
+        		<h5>{{currentTask.description}}</h5>
+        		<div class="form-inline">
+        			<div class="form-group">
+        				<h5><b>Categoria:</b> {{currentTask.category}}</h5>	
+        			</div>
+        			<div class="form-group" style="margin-left: 30px">
+        				<h5><b>Prioridade:</b> {{currentTask.priority}}</h5>	
+        			</div>	
+        			<div class="form-group" style="margin-left: 30px">
+    					<div class="">
+        					<h5><b>Progresso:</b></h5>
+        				</div>
+        				<div class="progress progress-striped active" style="margin-top: 10px">
+							<div class="progress-bar progress-bar-danger" ng-style="{width: getProgress()}">	
+							    <b>{{getProgress()}}</b>
+						  	</div>
+						</div>
+        			</div>							
+        		</div>
+				<h5><b>Subtarefas:</b></h5>
+    				<div class="panel panel-default" >
+    					<div class="panel-heading">
+        					<h6><b>A fazer:</b></h5>
+			        	</div>
+			        	<div class="panel-body" style="background-color: #1D2C3B">	
+			        		<table class="table table-striped table-hover" style="margin-top: 20px">
+								<tr ng-repeat="subtask in currentTask.subtasks.undone">
+									<td>
+										{{subtask}}
+									  	<button style="float:right" type="button" class="btn btn-default"
+									  	ng-click="done(subtask)">
+									    	<span class="glyphicon glyphicon-ok	"></span>
+									  	</button>
+									</td>
+								</tr>
+							</table>	
+        				</div>	
+        			</div>
+        			<div class="panel panel-default" >
+    					<div class="panel-heading">
+        					<h6><b>Feito:</b></h5>
+			        	</div>
+			        	<div class="panel-body" style="background-color: #1D2C3B">	
+			        		<table class="table table-striped table-hover" style="margin-top: 20px">
+								<tr ng-repeat="subtask in currentTask.subtasks.done">
+									<td>
+										{{subtask}}
+									  	<button style="float:right" type="button" class="btn btn-default"
+									  	ng-click="undone(subtask)">
+									    	<span class="glyphicon glyphicon-remove"></span>
+									  	</button>
+									</td>
+								</tr>
+							</table>	
+        				</div>	
+        			</div>
         	</div>
         	<div ng-show="editEnabled">
-				
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="form-group">
+						  <textarea ng-model="currentTask.description" class="form-control" rows="3" id="comment" placeholder="Descrição"></textarea>
+						</div>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-4">
+						<div class="input-group">
+							<span class="input-group-addon" id="sizing-addon2">
+								  	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+					  	  	</span>
+
+							<div class="btn-group" uib-dropdown is-open="false">
+							      <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+							         {{currentTask.priority}}
+							         <span class="caret"></span>
+							      </button>
+							      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+							      	<li ng-repeat="priority in priorities">
+							      		<a ng-click="edit.selectPriority(priority)">{{priority}}</a>
+							  		</li>
+							      </ul>
+						    </div>
+					    </div>
+					</div> 
+
+					<div class="col-xs-4">
+						<div class="input-group">
+							<span class="input-group-addon" id="sizing-addon2">
+								  	<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+					  	  	</span>
+
+							<div class="btn-group" uib-dropdown is-open="false">
+							      <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+							         {{currentTask.category}}
+							         <span class="caret"></span>
+							      </button>
+							      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+							      	<li ng-repeat="category in categories">
+							      		<a ng-click="edit.selectCategory(category)">{{category}}</a>
+							  		</li>
+							      </ul>
+						    </div>
+					    </div>
+					</div> 
+
+					<div class="col-xs-4">
+						<div class="input-group">
+							<span class="input-group-addon" id="sizing-addon2">
+								  	<span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+					  	  	</span>
+
+							<div class="btn-group" uib-dropdown is-open="false" ng-init="edit.listName = currentTask.list.name">
+							      <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+							         {{edit.listName}}
+							         <span class="caret"></span>
+							      </button>
+							      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+							      	<li ng-repeat="list in lists">
+							      		<a ng-click="edit.selectList(list);edit.listName = list.name">{{list.name}}</a>
+							  		</li>
+							      </ul>
+						    </div>
+					    </div>
+					</div> 
+				</div>
+
+				<div class="row">
+					<div class="col-xs-5">
+						<h5><b>Subtarefas</b></h4>
+					</div>				
+				</div>
+				<div class="row">
+					<form class="form-horizontal" role="form"">	
+							<div style="padding-left: 30px" class="col-xs-10">
+								<div class="form-group">
+										<input ng-model="edit.newSubTask" type="text" class="form-control"	placeholder="Adicionar subtarefa" >
+								</div>
+							</div>
+							<div class="col-xs-2">
+								<button type="button" class="btn btn-primary" ng-click="edit.addSubTask(edit.newSubTask); edit.newSubTask=''">
+							  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+								</button>	
+							</div>				
+					</form>
+				</div>
+
+				<div class="row">
+					<div class="col-xs-12">
+						<table class="table table-striped table-hover">
+							<tr ng-repeat="subtask in currentTask.subtasks.undone">
+								<td>
+									{{subtask}}
+								  	<button style="float:right" type="button" class="btn btn-default"
+								  	ng-click="edit.removeSubTask(subtask)">
+								    	<span class="glyphicon glyphicon-remove"></span>
+								  	</button>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
         	</div>
         </div>
         <div class="modal-footer">

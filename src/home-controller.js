@@ -1,5 +1,5 @@
 angular.module('agendaApp')
-.controller("homeController", function($scope,$rootScope,$location, $uibModal, $log, $document) {
+.controller("homeController", function($scope,$rootScope,$location, $uibModal, $log, $document, sharedModalProperties) {
 	$scope.priorities = [
 		"Alta",
 		"Média",
@@ -26,11 +26,23 @@ angular.module('agendaApp')
 
 	$scope.newTask = "";
 
-    $scope.subtasks = [];
+    $scope.subtasks = { undone: [],
+                        done: []
+                      };
+
     $scope.lists = [ 
         {name : "savio",
          tasks : [
-            {name : "savio1"}
+            {name : "savio1",
+            category: "Casa",
+            priority: "Alta",
+            subtasks: { undone: ["Fazer cocô", "Fazer xixi", "Dar descarga"],
+                        done: []},
+            list : {
+                name : "savio",
+                tasks : []
+            }
+            }
          ]
          }         
     ];
@@ -42,12 +54,6 @@ angular.module('agendaApp')
     $scope.itemToAdd = "Tarefa";
     $scope.selectedCategory = "Categoria";
     $scope.selectedList = {name : "Lista"};
-    $scope.currentTask = undefined;
-
-
-    $scope.coisinha = function(name) {
-        console.log(name);
-    }
 
     $scope.selectPriority = function(priority) {
     	$scope.priority = priority;
@@ -66,7 +72,7 @@ angular.module('agendaApp')
     }
 
     $scope.addSubTask = function(newTask) {
-   		$scope.subtasks.push(newTask);
+   		$scope.subtasks.undone.push(newTask);
    		$scope.newTask = "";
     }
 
@@ -84,8 +90,8 @@ angular.module('agendaApp')
     }
 
   	$scope.remove = function (subtask) {
-		var index = $scope.subtasks.indexOf(subtask);
-		$scope.subtasks.splice(index,1);
+		var index = $scope.subtasks.undone.indexOf(subtask);
+		$scope.subtasks.undone.splice(index,1);
     }
 
     $scope.saveTask = function () {
@@ -104,7 +110,9 @@ angular.module('agendaApp')
         });
 
         $scope.name = "";
-        $scope.subtasks = [];
+        $scope.subtasks = { undone: [],
+                            done: []
+                          };
         $scope.priority = "Prioridade";
         $scope.selectedList = { name : "Lista"};
         $scope.category = "Categoria";
@@ -130,10 +138,6 @@ angular.module('agendaApp')
         $scope.currentPage = index - 1;
     }
 
-    $scope.status = {
-    	isopen: false
- 	 };
-
     $scope.openModal = function (task, size, parentSelector) {  
         var parentElem = parentSelector ? 
             angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
@@ -143,20 +147,23 @@ angular.module('agendaApp')
             ariaLabelledBy: 'modal-title',
             ariaDescribedBy: 'modal-body',
             templateUrl: 'myModalContent.html',
-            controller: 'homeController',
-            controllerAs: '$ctrl',
+            scope: $scope,
             size: size,
             appendTo: parentElem,
+            controller: function($scope, task) {
+                $scope.currentTask = task;
+            },
             resolve: {
-                items: function () {
-                  return $scope.items;
-                }
+                task: function () {
+                  return $scope.currentTask;
             }
+        }
+            
         });
 
-        $rootScope.currentModal = modalInstance;
+        sharedModalProperties.setActiveModal(modalInstance);
 
-        $rootScope.currentModal.result.then(function () {
+        modalInstance.result.then(function () {
         }, function () {
             $log.info('Modal dismissed at: ' + new Date());
         });
@@ -167,8 +174,9 @@ angular.module('agendaApp')
     };
 
     $scope.setTask = function(task) {
-        $scope.currentTask = task;
+        sharedModalProperties.setCurrentTask(task);
     }
+
 
     $scope.cancel = function () {
         $rootScope.currentModal.dismiss({$value: 'cancel'});
