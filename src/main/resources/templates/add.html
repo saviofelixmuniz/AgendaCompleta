@@ -1,0 +1,186 @@
+<div class="row" style="padding-bottom: 20px">
+	<div class="col-xs-1">
+		<div class="input-group">
+			<span class="input-group-addon" id="sizing-addon2">
+				  	<span class="glyphicon glyphicon-file" aria-hidden="true"></span>
+	  	  	</span>
+
+			<div class="btn-group" uib-dropdown is-open="false">
+			      <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+			         {{itemToAdd}}
+			         <span class="caret"></span>
+			      </button>
+			      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+			      	<li ng-repeat="item in itemsToAdd">
+			      		<a ng-click="selectItem(item)">{{item}}</a>
+			  		</li>
+			      </ul>
+		    </div>
+	    </div>
+	</div> 	
+</div>
+   
+<div class="container" ng-show="$parent.itemToAdd == 'Tarefa'">
+		<div class="row">
+			<div class="col-xs-6">
+				<div class="input-group">
+				  <span class="input-group-addon" id="sizing-addon2">
+				  	<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+			  	  </span>
+				  <input type="text" class="form-control" placeholder="Nome" aria-describedby="sizing-addon2" ng-model = "$parent.name">
+				</div>
+			</div>   
+		</div>
+		<div class="row" style="padding-top: 20px">
+			<div class="col-xs-6">
+				<div class="form-group">
+				  <textarea ng-model="$parent.description" class="form-control" rows="3" id="comment" placeholder="Descrição"></textarea>
+				</div>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-2">
+				<div class="input-group">
+					<span class="input-group-addon" id="sizing-addon2">
+						  	<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+			  	  	</span>
+
+					<div class="btn-group" uib-dropdown is-open="false">
+					      <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+					         {{priority}}
+					         <span class="caret"></span>
+					      </button>
+					      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+					      	<li ng-repeat="priority in priorities">
+					      		<a ng-click="selectPriority(priority)">{{priority}}</a>
+					  		</li>
+					      </ul>
+				    </div>
+			    </div>
+			</div> 
+
+			<div class="col-xs-2">
+				<div class="input-group">
+					<span class="input-group-addon" id="sizing-addon2">
+						  	<span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+			  	  	</span>
+
+					<div class="btn-group" uib-dropdown is-open="false">
+					      <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+					         {{selectedCategory}}
+					         <span class="caret"></span>
+					      </button>
+					      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+					      	<li ng-repeat="category in categories">
+					      		<a ng-click="selectCategory(category)">{{category}}</a>
+					  		</li>
+					      </ul>
+				    </div>
+			    </div>
+			</div> 
+
+			<div class="col-xs-2">
+				<div class="input-group">
+					<span class="input-group-addon" id="sizing-addon2">
+						  	<span class="glyphicon glyphicon-bookmark" aria-hidden="true"></span>
+			  	  	</span>
+
+					<div class="btn-group" uib-dropdown is-open="false">
+					      <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
+					         {{selectedList.name}}
+					         <span class="caret"></span>
+					      </button>
+					      <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
+					      	<li ng-repeat="list in lists">
+					      		<a ng-click="selectList(list)">{{list.name}}</a>
+					  		</li>
+					      </ul>
+				    </div>
+			    </div>
+			</div> 
+		</div>
+
+		<div class="row">
+			<div class="col-xs-5">
+				<h5><b>Subtarefas</b></h4>
+			</div>				
+		</div>
+		<div class="row">
+			<form class="form-horizontal" role="form"">	
+					<div style="padding-left: 30px" class="col-xs-5">
+						<div class="form-group">
+								<input ng-model="$parent.newTask" type="text" class="form-control"	placeholder="Adicionar subtarefa" >
+						</div>
+					</div>
+					<div class="col-xs-2">
+						<button type="button" class="btn btn-primary" ng-click="addSubTask($parent.newTask)">
+					  		<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+						</button>	
+					</div>				
+			</form>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-6">
+				<table class="table table-striped table-hover">
+					<tr ng-repeat="subtask in subtasks.undone">
+						<td>
+							{{subtask}}
+						  	<button style="float:right" type="button" class="btn btn-default"
+						  	ng-click="remove(subtask)">
+						    	<span class="glyphicon glyphicon-remove"></span>
+						  	</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-xs-6">
+				<button style="float: right" type="button" class="btn btn-primary" ng-click="saveTask()">
+				  <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+				  <span>Salvar</span>
+				</button>	
+			</div>	
+		</div>
+</div>
+
+<div style = "padding-left: 20px" ng-show="$parent.itemToAdd == 'Lista'">
+	<div class="row">
+		<div class="col-xs-4">
+			<div class="input-group">
+			  <span class="input-group-addon" id="sizing-addon2">
+			  	<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+		  	  </span>
+			  <input type="text" class="form-control" placeholder="Nome da lista" aria-describedby="sizing-addon2" ng-model = "$parent.listName">
+			</div>
+		</div>
+		<div class="col-xs-3">
+			<button type="button" class="btn btn-primary" ng-click="saveList(listName)">
+			  <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+			  <span>Salvar</span>
+			</button>	
+		</div>	
+	</div>
+</div>
+
+<div style = "padding-left: 20px" ng-show="$parent.itemToAdd == 'Categoria'">
+	<div class="row">
+		<div class="col-xs-4">
+			<div class="input-group">
+			  <span class="input-group-addon" id="sizing-addon2">
+			  	<span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+		  	  </span>
+			  <input type="text" class="form-control" placeholder="Nome da categoria" aria-describedby="sizing-addon2" ng-model = "$parent.categoryName">
+			</div>
+		</div>
+		<div class="col-xs-3">
+			<button type="button" class="btn btn-primary" ng-click="saveCategory(categoryName)">
+			  <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span>
+			  <span>Salvar</span>
+			</button>	
+		</div>	
+	</div>
+</div>
