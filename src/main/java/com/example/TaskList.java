@@ -2,32 +2,42 @@ package com.example;
 
 import org.springframework.data.annotation.Id;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by saviomuniz on 04/02/17.
  */
-public class TaskList {
+@Entity
+public class TaskList implements Serializable{
 
     @Id
-    public String id;
+    private long id;
 
+    @Column
     public String name;
+    @Column
     public List<Task> tasks;
 
     public TaskList(String name, List<Task> tasks) {
+        this.id = (long) (Math.random()*1000);
         this.name = name;
         this.tasks = tasks;
     }
 
     public TaskList() {
+        this.id = (long) (Math.random()*1000);
     }
 
-    public String getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -45,5 +55,10 @@ public class TaskList {
 
     public void setTasks(List<Task> tasks) {
         this.tasks = tasks;
+    }
+
+    @Override
+    public String toString(){
+        return getName()+ " - "+getTasks();
     }
 }

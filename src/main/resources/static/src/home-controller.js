@@ -118,7 +118,6 @@ angular.module('agendaApp')
         var newList = { name : name,
                         tasks : [] };
         $scope.lists.push(newList);
-        $scope.listName = "";
         $scope.save($scope.lists);
     }
 
@@ -177,10 +176,12 @@ angular.module('agendaApp')
     }
 
     $scope.save = function(lists) {
-        $scope.lists.forEach(function(list) {
-            var optionJson_Value = {headers: {'Content-Type':['application/json']}};
+        console.log(lists);
+        lists.forEach(function(list) {
+            delete list['$$hashKey'];
             console.log(JSON.stringify(list));
-            $http.post("/list/save",list,optionJson_Value);    
+            var optionJson_Value = {headers: {'Content-Type':'application/json'}};
+            $http.post("/list/save", JSON.stringify(list), optionJson_Value);
         });
     }
 

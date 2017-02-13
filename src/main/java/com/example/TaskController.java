@@ -22,8 +22,9 @@ public class TaskController {
     @Autowired
     private TaskListRepository repository;
 
-    @RequestMapping(value = "/list/save",method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TaskList> saveLists (TaskList list) {
+    @RequestMapping(value = "/list/save",method = RequestMethod.POST)
+    public ResponseEntity<TaskList> saveLists (@RequestBody TaskList list) {
+        System.out.println("TASK: "+list);
         System.out.println(list.getName());
         System.out.println(list.getTasks());
         repository.deleteByName(list.getName());
