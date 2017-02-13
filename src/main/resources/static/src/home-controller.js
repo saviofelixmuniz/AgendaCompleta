@@ -1,5 +1,5 @@
 angular.module('agendaApp')
-.controller("homeController", function($scope,$rootScope,$location, $uibModal, $log, $document, sharedModalProperties) {
+.controller("homeController", function($scope,$rootScope, $http, $location, $uibModal, $log, $document, sharedModalProperties) {
 	$scope.priorities = [
 		"Alta",
 		"Média",
@@ -37,14 +37,12 @@ angular.module('agendaApp')
             category: "Casa",
             priority: "Alta",
             subtasks: { undone: ["Have fun", "Drink beer", "Go home"],
-                        done: []},
-            list : undefined
+                        done: []}
             }
          ]
          }         
     ];
 
-    $scope.lists[0].tasks[0].list = $scope.lists[0];
     $scope.indexes = [];
     $scope.currentPage = 0;
 
@@ -96,7 +94,6 @@ angular.module('agendaApp')
     	var newTask = { name : $scope.name,
     		            subtasks : $scope.subtasks,
     		            priority : $scope.priority,
-                        list : $scope.selectedList,
                         category : $scope.selectedCategory,
     		            description : $scope.description };
 
@@ -122,7 +119,7 @@ angular.module('agendaApp')
                         tasks : [] };
         $scope.lists.push(newList);
         $scope.listName = "";
-        $scope.save();
+        $scope.save($scope.lists);
     }
 
     $scope.getIndex = function () {
@@ -179,8 +176,12 @@ angular.module('agendaApp')
         sharedModalProperties.setCurrentTask(task);
     }
 
-    $scope.save = function() {
-        $http.post("/list/save",$scope.lists);
+    $scope.save = function(lists) {
+        $scope.lists.forEach(function(list) {
+            var optionJson_Value = {headers: {'Content-Type':['application/json']}};
+            console.log(JSON.stringify(list));
+            $http.post("/list/save",list,optionJson_Value);    
+        });
     }
 
 })

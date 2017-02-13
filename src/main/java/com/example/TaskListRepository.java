@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface TaskListRepository extends MongoRepository<TaskList,String> {
 
+    public void deleteByName (String name);
 }
