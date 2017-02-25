@@ -30,20 +30,6 @@ angular.module('agendaApp')
                         done: []
                       };
 
-    $rootScope.lists = [ 
-        {name : "savio",
-         tasks : [
-            {name : "Go out",
-            category: "Casa",
-            description : "Se divertir na night",
-            priority: "Alta",
-            subtasks: { undone: ["Have fun", "Drink beer", "Go home"],
-                        done: []}
-            }
-         ]
-         }         
-    ];
-
     $scope.indexes = [];
     $scope.currentPage = 0;
 
@@ -52,6 +38,9 @@ angular.module('agendaApp')
     $scope.selectedCategory = "Categoria";
     $scope.selectedList = {name : "Lista"};
 
+    $scope.okiedokie = function () {
+        console.log("fudeu");
+    }
     $scope.selectPriority = function(priority) {
     	$scope.priority = priority;
     }
@@ -195,6 +184,9 @@ angular.module('agendaApp')
         $http.get("/list/get",optionJson_Value)
         .then (function (response) {
              $rootScope.lists = response.data;
+             console.log($rootScope.lists);
+             $scope.processPages();
+             $scope.indexes = $scope.getIndex();
         });
     }
 
