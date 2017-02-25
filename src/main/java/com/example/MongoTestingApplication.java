@@ -26,7 +26,7 @@ public class MongoTestingApplication implements CommandLineRunner {
 		repository.deleteAll();
 
         List<Task> list = new LinkedList<Task>();
-        list.add(new Task("Fazer atividade","aewfiuawf","Alta","Casa",null,null));
+        list.add(new Task("Fazer atividade","aewfiuawf","Alta","Casa",null));
 
 		repository.save(new TaskList("cookie",list));
 

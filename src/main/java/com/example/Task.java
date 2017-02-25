@@ -26,18 +26,15 @@ public class Task implements Serializable{
     @Column
     private String category;
     @Column
-    private TaskList list;
-    @Column
-    private SubTasks subTasks;
+    private SubTasks subtasks;
 
-    public Task(String name, String description, String priority, String category, TaskList list, SubTasks subTasks) {
+    public Task(String name, String description, String priority, String category, SubTasks subtasks) {
         this.name = name;
         this.description = description;
         this.priority = priority;
         this.category = category;
-        this.list = list;
         this.id = (long) (Math.random()*1000);
-        this.subTasks = subTasks;
+        this.subtasks = subtasks;
     }
 
     public Task() {
@@ -85,20 +82,12 @@ public class Task implements Serializable{
         this.category = category;
     }
 
-    public TaskList getList() {
-        return list;
+    public SubTasks getSubtasks() {
+        return subtasks;
     }
 
-    public void setList(TaskList list) {
-        this.list = list;
-    }
-
-    public SubTasks getSubTasks() {
-        return subTasks;
-    }
-
-    public void setSubTasks(SubTasks subTasks) {
-        this.subTasks = subTasks;
+    public void setSubtasks(SubTasks subTasks) {
+        this.subtasks = subTasks;
     }
 
     @Override
